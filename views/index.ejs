@@ -4,41 +4,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>TestPage</title>
-<script src="https://code.jquery.com/jquery-1.10.2.js"></script> 
+    <title>DO_IT</title>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<!--fullpage.js js,css 파일 삽입-->
+<!-- <link rel="stylesheet" href="./fullpage/fullpage.min.css">
+<script src="./fullpage/fullpage.min.js"></script> -->
+<!-- font -->
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR|Noto+Sans:700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap" rel="stylesheet">
+<!--초기화-->
+<link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
+<!-- 기본 헤더 컨텐츠 푸터 layout -->
+<link rel="stylesheet" href="./stylesheets/layout2.css">
+<!-- home css -->
+<link rel="stylesheet" href="./stylesheets/home.css">
 </head>
 <body>
-    <h1>TestPage</h1>
-    <a href="/studyDetail">스터디</a>
-	<form action="/user/login" method="post">
-		<input type="text" id="userId"/>
-		<input type="password" id="userPw"/>
-		<input type="button" id="login" value="로그인" />
-	</form>
+<div id="container">
+	<div class="section section1">
+		<div class="container">
+			<div class="head">
+				<a class="logo" href="/"><img src="./images/logo_long.png"></a>
+				<div class="nav">
+					<ul>
+					<% if(name == '') { %>
+						<li><a href="/user/login">로그인</a></li>
+					<% } else { %>
+						<li><a href="/mypage"/><%= name %></li>
+						<li><a href="/user/logout"/>로그아웃</li>
+					<% } %>
+						<li><a href="#">코치신청</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="contents">
+				<div class="innercontetns">
+					<div class="maintext">
+						운동,<br>
+						<SPAN>혼자</SPAN>말고
+						<br>
+						<span>같이</span>하자
+						<div class="tologin">
+							<a href="#">GET STARTED</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>        
+            <!-- <div class="section section2">
+
+                <div class="contentsBox">
+                    <h1>누구든 "<span>DO IT</span>"</h1>
+                    
+                    <div class="member ">
+                        <p>
+                        같은 지역에서
+
+                        </p>
+                    </div>
+
+                </div>         
+        
+            </div>
+    
+            <div class="section">
+                page 3
+
+                <div class="footer">LEVELUPTHON 11 | 2019</div>
+
+            </div>
+        
+        
+        
+                
+
+        </div> -->
+
+
 </body>
 <script>
-$(document).ready(function() {
-	$('#login').click(function() {
-		var userId = $("#userId").val();
-		var userPw = $("#userPw").val();
-		$.ajax({
-			url: '/user/login',
-			dataType: 'json',
-			type: 'POST',
-			data: {
-					userId : userId,
-					userPw : userPw
-				},
-			success: function(result) {
-				var loginCheck = result.result;
-				if(loginCheck == 'Success') {
-					location.href = '/login';
-				} else {
-					alert('회원정보가 일치하지 않습니다.');	
-				}
-			}
-		});
-	});
-});
+	var name = '<%= name %>';
+	console.log(name);
+	// new fullpage('#container', {
+	// 	navigation: true,
+	// });
 </script>
 </html>

@@ -21,9 +21,12 @@ app.use(session({
 
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/users');
+var studyRouter = require('./routes/study');
 
 app.use('/', indexRouter);
 app.use('/user', userRouter);
+app.use('/study', studyRouter);
+
 
 http.listen(3000, function(){ 
 	console.log('server on..');

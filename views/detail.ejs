@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>study/detail</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+    <h1><%=title%></h1>
+    <div>
+      제목 : <%=study[0].subject%> <br>
+      시작 날짜 : <%=study[0].start_date%> <br>
+      종료 날짜 : <%=study[0].end_date%> <br>
+      내용 : <%=study[0].content%> <br>
+      참가 인원 : <%=study[0].personnel%> <br>
+      지역 : <%=study[0].region%> <br>
+    </div>
+    <input type="button" id="btnParti" value="참가신청">
+    <script>
+      $("#btnParti").click(function(){
+        $.ajax({
+          url : '/study/partiStudy',
+          async : true,
+          type : 'POST',
+          data : {
+            user_id : 'test', //추후수정
+            study_id : <%=study[0].study_id%>
+          },
+          dataType : 'json',
+          success : function(data){
+            var result = data.result;
+            if(result == 'Success'){
+                alert('참가신청 되었습니다!');
+            }else{
+              alert('다시시도 해주세요');
+            }
+          },
+          error : function(err){
+            alert('실패!' + err);
+          }
+        })
+      });
+    </script>
+
+</body>
+</html>
