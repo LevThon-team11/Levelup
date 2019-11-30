@@ -99,7 +99,7 @@ button:hover,
 			<input type="password" placeholder="Enter Password" id="userPw" required>
 
 			<label for="psw-repeat">Repeat Password</label>
-			<input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+			<input type="password" placeholder="Repeat Password" id="userPw2" name="psw-repeat" required>
 			<!--id중복체크 버튼만들기. -->
 			<label for="name">Name</label>
 			<input type="text" placeholder="Enter Name" id="userNm" required>
@@ -130,9 +130,18 @@ $(document).ready(function () {
 		var userNm = $.trim($("#userNm").val());
 		var email  = $.trim($("#email").val());
 		var phone  = $.trim($("#phone").val());
+		var userPw2 = $.trim($("#userPw2").val());
 		
 		if(!checkResult) {
 			alert("아이디 중복체크가 필요합니다.");
+			return;
+		}
+		
+		if(userPw != userPw2) {
+			alert("비밀번호가 일치하지 않습니다.");
+			$("#userPw").val("");
+			$("#userPw2").val("");
+			$("#userPw").focus();
 			return;
 		}
 		
