@@ -8,7 +8,7 @@ mysql_dbc.test_open(connection);
 /* GET home page. */
 router.get('/', function(req, res, next) {
   console.log('indexPage');
-  res.render('index', { title: 'Express' });
+  res.render('index');
 });
 
 router.get('/test', function (req, res) {
@@ -18,6 +18,11 @@ router.get('/test', function (req, res) {
 	  console.log(result[0][1]);
   });
   res.render('index', { title: 'Express' });
+});
+
+router.get('/login', function(req, res, next) {
+  console.log('loginPage');
+  res.render('login');
 });
 
 module.exports = router;

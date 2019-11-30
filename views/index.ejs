@@ -5,9 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>TestPage</title>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script> 
 </head>
 <body>
     <h1>TestPage</h1>
     <a href="/studyDetail">스터디</a>
+	<form action="/user/login" method="post">
+		<input type="text" id="userId"/>
+		<input type="password" id="userPw"/>
+		<input type="button" id="login" value="로그인" />
+	</form>
 </body>
+<script>
+$(document).ready(function() {
+	$('#login').click(function() {
+		var userId = $("#userId").val();
+		var userPw = $("#userPw").val();
+		$.ajax({
+			url: '/user/login',
+			dataType: 'json',
+			type: 'POST',
+			data: {
+					userId : userId,
+					userPw : userPw
+				},
+			success: function(result) {
+				var loginCheck = result.result;
+				if(loginCheck == 'Success') {
+					location.href = '/login';
+				} else {
+					alert('회원정보가 일치하지 않습니다.');	
+				}
+			}
+		});
+	});
+});
+</script>
 </html>
