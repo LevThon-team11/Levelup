@@ -91,7 +91,7 @@ router.get('/search', function(req, res){
 
 router.get('/detail/:idx',function (req,res) {
 	var idx = req.params.idx;
-  	connection.query(`SELECT * FROM study where study_id=?`, [idx], function(error, study){
+  	connection.query(`SELECT *, date_format(start_date, '%Y-%m-%d') as startDate, date_format(end_date, '%Y-%m-%d') as endDate FROM study where study_id=?`, [idx], function(error, study){
 	var sess = req.session.loginInfo;
 	if(sess == undefined) {
 		res.redirect('/');

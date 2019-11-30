@@ -110,6 +110,10 @@ router.get('/mypage', function(req, res){
 	console.log('mypage');
 	var sess = req.session.loginInfo;
 	var stmt = 'select * from parti_study a inner join study b on a.study_id = b.study_id where a.user_id = ?';
+	if(sess == undefined) {
+		res.redirect('/');
+		return;
+	}
 	var param = [req.session.loginInfo.user_id];
   	connection.query(stmt, param, function (err, result) {
 		if(sess == undefined) {
