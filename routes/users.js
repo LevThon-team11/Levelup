@@ -5,6 +5,7 @@ var mysql_dbc = require('./db_conf')();
 var connection = mysql_dbc.init();
 mysql_dbc.test_open(connection);
 var mysql = require('mysql');
+var crypto = require('crypto');
 
 
 /* GET users listing. */
@@ -24,12 +25,20 @@ router.post('/login', function(req, res, next) {
 		var data = querystring.parse(chunk.toString());
 		userId = data.userId;
 		userPw = data.userPw;
-		var stmt = 'select * from user where user_id = ' + mysql.escape(userId) + ' and password = ' + mysql.escape(userPw);
+		var stmt = 'select * from user where user_id = ' + mysql.escape(userId);
 		connection.query(stmt, function (err, result) {
-			if(result.length > 0 && userId == result[0].user_id && userPw == result[0].password) {
-				req.session.loginInfo = result[0];
-				console.log(req.session.loginInfo.name);
-				res.send({result:'Success'});
+			if(result.length > 0) {
+				let dbPassword = result[0].password;
+				let salt = result[0].salt;
+				let hashPassword = crypto.createHash("sha512").update(userPw + salt).digest("hex");
+
+				if(dbPassword === hashPassword){
+					req.session.loginInfo = result[0];
+					console.log("비밀번호 일치");
+					res.send({result:'Success'});
+				} else {
+					res.send({result:'Fail'});	
+				}
 			} else {
 				res.send({result:'Fail'});
 			}
@@ -66,8 +75,10 @@ router.post('/join', function(req, res, next) {
 		userNm = data.userNm;
 		email  = data.email;
 		phone  = data.phone;
-		var stmt = 'insert into user values (' + mysql.escape(userId) + ', ' + mysql.escape(userPw) + ', ' + mysql.escape(userNm) + ', ' + mysql.escape(email) + ', '
-		stmt += mysql.escape(phone) + ')';
+  		var salt = Math.round((new Date().valueOf() * Math.random())) + "";
+  		var hashPassword = crypto.createHash("sha512").update(userPw + salt).digest("hex");
+		var stmt = 'insert into user values (' + mysql.escape(userId) + ', ' + mysql.escape(hashPassword) + ', ' + mysql.escape(userNm) + ', '
+		stmt += mysql.escape(email) + ', ' + mysql.escape(phone) + ', ' + mysql.escape(salt) + ')';
 		connection.query(stmt, function (err, result) {
 			if(err) {
 				res.send({result : 'Fail'});
@@ -93,6 +104,20 @@ router.post('/idCheck', function(req, res, next) {
 			}
 		});
 	});
+});
+
+router.get('/mypage', function(req, res){
+	console.log('mypage');
+	var sess = req.session.loginInfo;
+	var stmt = 'select * from parti_study a inner join study b on a.study_id = b.study_id where a.user_id = ?';
+	var param = [req.session.loginInfo.user_id];
+  	connection.query(stmt, param, function (err, result) {
+		if(sess == undefined) {
+			res.redirect('/');
+		} else {
+			res.render('mypage', {title : 'mypage', mypage : result, name : sess.name});
+		}
+ 	});
 });
 
 module.exports = router;

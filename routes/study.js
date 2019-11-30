@@ -11,7 +11,12 @@ router.get('/', function (req, res) {
   console.log('study main get');
   var stmt = 'select * from study';
   connection.query(stmt, function (err, results) {
-    res.render('study', { title: 'studies', studyList : results });
+	var sess = req.session.loginInfo;
+	if(sess == undefined) {
+		res.redirect('/');
+	} else {
+		res.render('study', { title: 'studies', studyList : results });
+	}
   });
 });
 
@@ -85,9 +90,14 @@ router.get('/search', function(req, res){
 // });
 
 router.get('/detail/:idx',function (req,res) {
-  var idx = req.params.idx;
-  connection.query(`SELECT * FROM study where study_id=?`, [idx], function(error, study){
-    res.render('detail', {title : 'study', study:study});
+	var idx = req.params.idx;
+  	connection.query(`SELECT * FROM study where study_id=?`, [idx], function(error, study){
+	var sess = req.session.loginInfo;
+	if(sess == undefined) {
+		res.redirect('/');
+	} else {
+		res.render('detail', {title : 'study', study:study, user_id:sess.user_id, name: sess.name});
+	}
   });
 });
 
@@ -101,7 +111,7 @@ router.post('/partiStudy', function(req, res){
     study_id = data.study_id;
     user_id = data.user_id;
 
-    var stmt = 'INSERT INTO PARTI_STUDY VALUES(?, ?)';
+    var stmt = 'INSERT INTO parti_study VALUES(?, ?)';
     var params = [study_id, user_id];
 
     connection.query(stmt, params, function(err, result, fields){

@@ -30,7 +30,7 @@
 					<% if(name == '') { %>
 						<li><a href="/user/login">로그인</a></li>
 					<% } else { %>
-						<li><a href="/mypage"/><%= name %></li>
+						<li><a href="/user/mypage"/><%= name %></li>
 						<li><a href="/user/logout"/>로그아웃</li>
 					<% } %>
 						<li><a href="#">코치신청</a></li>
@@ -45,7 +45,11 @@
 						<br>
 						<span>같이</span>하자
 						<div class="tologin">
-							<a href="#">GET STARTED</a>
+						<% if(name == '') { %>
+							<a href="/user/login">GET STARTED</a>
+						<% } else { %>
+							<a href="/user/mypage"/>GET STARTED</a>
+						<% } %>
 						</div>
 					</div>
 				</div>
